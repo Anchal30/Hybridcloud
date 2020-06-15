@@ -18,8 +18,9 @@ Have to create/launch Application using Terraform
 8 Create a Cloudfront using s3 bucket(which contains images) and use the Cloudfront URL to update in code in /var/www/html
 
 "About task1.tf" 1. To go inside directory where " .tf" file is stored. {like:- #cd desktop #cd hybrid cloud #cd tera #cd 23_task1 } 2. open that .tf file with notepad #notepad task1.tf (file task1.tf is also attched in the repo) 3. Run these commands to initialize plugin as well as to run code
-terraform init
-terraform validate
-#terraform apply -auto-approve
+
+# terraform init
+# terraform validate
+# terraform apply -auto-approve
 
 *Output is being attaches after ruuning this file:-"output.png
