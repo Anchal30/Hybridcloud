@@ -2,12 +2,12 @@ provider "aws" {
   region  = "ap-south-1"
 profile="askuser"
 }
-//input for key name
+# input for key name
 variable "enter_key_name" {
                  type = string
               }
 
-// create key pair
+# create key pair
 resource "tls_private_key" "this" {
   algorithm = "RSA"
 }
@@ -19,7 +19,7 @@ resource "aws_key_pair"   "deployer" {
 output "keyout" {
    value=aws_key_pair.deployer. key_name
 }
-//create security group
+# create security group
 resource "aws_security_group" "sg_terraform" {
   name        = "terasg1"
   description = "Allow TLS inbound traffic"
@@ -65,7 +65,7 @@ resource "aws_instance" "askinusingterra1" {
   }
 }
 
-// create volume
+# create volume
 resource "aws_ebs_volume" "askebsusingterra" {
   availability_zone = aws_instance.askinusingterra1.availability_zone
   size              = 1
@@ -74,31 +74,31 @@ resource "aws_ebs_volume" "askebsusingterra" {
     Name = "teraebs"
   }
 }
-// attach volume
+# attach volume
 resource "aws_volume_attachment" "ebs_att" {
   device_name = "/dev/sdh"
   volume_id   = aws_ebs_volume.askebsusingterra.id
   instance_id = aws_instance.askinusingterra1.id
  force_detach = true
 }
-// print public ip
+# print public ip
 output "myos_ip" {
   value = aws_instance.askinusingterra1.public_ip
 }
 
-// save public ip in a file
+# save public ip in a file
 resource "null_resource" "nulllocal1"  {
 	provisioner "local-exec" {
 	    command = "echo  ${aws_instance.askinusingterra1.public_ip} > publicip.txt"
   	}
 }
-// create s3 bucket
+# create s3 bucket
 resource "aws_s3_bucket" "b" {
-  bucket = "teraaskbucket"
+  bucket = "teraaskbucket"  # should be unique
   acl    = "public-read"
 force_destroy=true
  }
-// upload object to s3 bucket
+# upload object to s3 bucket
 resource "aws_s3_bucket_object"  "teraobj1" {
 depends_on=[aws_s3_bucket.b]
     bucket =  "teraaskbucket"
@@ -107,7 +107,7 @@ depends_on=[aws_s3_bucket.b]
   etag="D:/images/anniversary/images.jpg"
  acl= "public-read"
  }
-// create cloudfront
+# create cloudfront
 resource "aws_cloudfront_distribution" "teracl1" {
 depends_on=[aws_s3_bucket_object.teraobj1]
   origin {
@@ -199,7 +199,7 @@ viewer_protocol_policy = "allow-all"
 }
 
  
-// remote connection
+# remote connection
 resource "null_resource" "nullremote1"  {
 
 depends_on = [
@@ -211,7 +211,7 @@ depends_on = [
     private_key = tls_private_key.this.private_key_pem
     host     = aws_instance.askinusingterra1.public_ip
   }
-// copy github code into html folder
+# copy github code into html folder
 provisioner "remote-exec" {
     inline = [
        "sudo yum install httpd  php git -y",
@@ -225,7 +225,7 @@ provisioner "remote-exec" {
     ]
   }
 }
-// run code
+# run code
 resource "null_resource" "nulllocal2"  {
 depends_on = [
     null_resource.nullremote1,
