@@ -92,12 +92,13 @@ resource "null_resource" "nulllocal1"  {
 	    command = "echo  ${aws_instance.askinusingterra1.public_ip} > publicip.txt"
   	}
 }
-
+// create s3 bucket
 resource "aws_s3_bucket" "b" {
   bucket = "teraaskbucket"
   acl    = "public-read"
 force_destroy=true
  }
+// upload object to s3 bucket
 resource "aws_s3_bucket_object"  "teraobj1" {
 depends_on=[aws_s3_bucket.b]
     bucket =  "teraaskbucket"
@@ -106,7 +107,7 @@ depends_on=[aws_s3_bucket.b]
   etag="D:/images/anniversary/images.jpg"
  acl= "public-read"
  }
-
+// create cloudfront
 resource "aws_cloudfront_distribution" "teracl1" {
 depends_on=[aws_s3_bucket_object.teraobj1]
   origin {
@@ -210,7 +211,7 @@ depends_on = [
     private_key = tls_private_key.this.private_key_pem
     host     = aws_instance.askinusingterra1.public_ip
   }
-// copy code
+// copy github code into html folder
 provisioner "remote-exec" {
     inline = [
        "sudo yum install httpd  php git -y",
