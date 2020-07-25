@@ -95,7 +95,7 @@ resource "null_resource" "nulllocal1"  {
 resource "null_resource" "nulllocal32"  {
 
  provisioner "local-exec" {
-    command = "git clone https://github.com/Anchal30/automationweb.git   C:/Users/dipan/Desktop/task_1/repo/"
+    command = "git clone https://github.com/Anchal30/Hybridcloud.git   C:/Users/dipan/Desktop/task_1/repo/"
     when    = destroy
   }
 }
@@ -246,7 +246,7 @@ depends_on = [
       "sudo mkfs.ext4  /dev/xvdh",
       "sudo mount   /dev/xvdh   /var/www/html",
       "sudo rm  -rf   /var/www/html/*",
-      "sudo git clone   https://github.com/Anchal30/automationweb.git    /var/www/html/",
+      "sudo git clone   https://github.com/Anchal30/Hybridcloud.git   /var/www/html/",
       "sudo su << EOF",
       "echo \"<img src='https://${aws_cloudfront_distribution.cf1_tf.domain_name}/${aws_s3_bucket_object.buc_obj1.key }'>\" >> /var/www/html/index.html",
        "EOF",
